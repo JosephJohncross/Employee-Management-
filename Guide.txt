@@ -1,0 +1,63 @@
+Structure of the Clean Architecture
+
+Layer 1
+DOMAIN should be an independent project
+
+Layer 2
+APPLICATION layer should depend on the DOMAIN layer
+
+Layer 3
+INFRASTRUCTURE layer should depend on both the APPLICATION and DOMAIN layers
+
+Layer 4
+WEB API (Presentation or UI) layer should depend on only the INFRASTRUCTURE and APPLICATION layers
+
+
+Recommendations
+When combining the CQRS pattern and MediatR
+
+1. Install MediatR, FluentValidation, FluentValidation.DependencyInjectionExtensions package in the Application Layer
+2. Install Microsoft.Extensions.DependencyInjection in the Infrastructure layer
+3. Install MediatR.Extensions.DependencyInjection in the Web API
+
+If using AutoMapper for Mapping Types
+1. Install AutoMapper, AutoMapper.Extensions.Microsoft.DependencyInjection in the Application Layer
+
+For Respository Pattern or Data interactions
+1. The DbContext exist in the Infrastructure Layer
+    Install Microsoft.EntityFrameworkCore and Microsoft.EntityFrameworkCore.SqlServer
+
+Repository interfaces are created at the Application Layer, while their implementations are made at the infrastructure layer
+( Remember to register all created repositories )
+All migrations are run at the infrastructure layer
+
+When implementing the MediatR Pattern using Commands and Queries
+
+OPTION 1
+
+For each domain feature, a folder needs to exist eg Person folder should contain a Command and Queries Folder,
+each of which could probably contain some, but not all of the below mentioned
+
+ >> Command - They represent the intent to perform specific actions
+-- Command for the WRITE action to be performed  eg CreatePersonCommand (must)
+-- CommandHanler for to handle the  respective command  eg CreatePersonCommandHandler (must)
+-- Command Response (optional, depending on use case)
+-- Command Validator (optional, for performing validations)
+
+ >> Queries - These queries represent the intent to read data
+ -- Query for READ action to perform eg GetAPersonQuery
+ -- Query Handler to handle the corresponding query action eg GetAPersonQueryHandler
+    ...
+
+OPTION 2
+Or you can choose to keep a seperate folder for CommandHandlers And Query CommandHandlers
+ie 
+For a feature, say Person, you create 
+- A Command folder that holds all the Write commands pertaining to the Person
+- A Queries folder that holds all  Read commands pertaining to that feature
+- A Command Handler folder for handling all commads
+- A Query Handler folder for handling all queries
+
+Command or Query must implement the IRequest<> interface from MediatR,
+while the corresponding handler, must implement the IRequestHandler<Command or Query, Return Type supplied in the Command or Query> interface  
+and must implement the Handle method of the interface
