@@ -8,13 +8,13 @@ namespace EmployeeManagement.API.EndpointClasses.Employee
         /// <summary>
         /// All Employees per department
         /// </summary>
-        /// <param name="departmentInitial">Department abbreviation</param>
+        /// <param name="deptAbbr">Department abbreviation</param>
         /// <returns>A collection of employees</returns>
         /// 
         [HttpGet("/api/employees/{deptAbbr}", Name = "GetEmployeeByDepartment")]
         [Description("Returns all employees in a department")]
         [SwaggerOperation(Tags = new[] { "Employee" })]
-        public ActionResult HandleAsync(string departmentInitial)
+        public ActionResult HandleAsync(string deptAbbr)
         {
             return Ok();
         }
