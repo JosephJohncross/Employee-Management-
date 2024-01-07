@@ -7,7 +7,8 @@ namespace EmployeeManagement.Domain.Entities
 {
     public class Department : AuditableEntity
     {
-        public int Id { get; set; }
+
+        public int Guid { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Abbreviation { get; set; } = string.Empty;
     }

@@ -7,9 +7,16 @@ namespace EmployeeManagement.Domain.Common
 {
     public class AuditableEntity
     {
-        public DateTime CreatedAt { get; set; }
+
+        public AuditableEntity()
+        {   
+            CreatedAt = DateTime.UtcNow;
+            ModifiedAt = CreatedAt;
+        }
+
+        public DateTime CreatedAt { get; }
         public string? CreatedBy { get; set; }
-        public DateTime ModifiedAt { get; set; }
+        public DateTime ModifiedAt { get; }
         public string? ModifiedBy { get; set; }
     }
 }
