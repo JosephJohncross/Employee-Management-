@@ -1,13 +1,17 @@
 Structure of the Clean Architecture
 
 Layer 1
-DOMAIN should be an independent project
+DOMAIN should be an independent project.
+It encapsulates all the business logic and entities that define the core functionality of the system
 
 Layer 2
 APPLICATION layer should depend on the DOMAIN layer
+Acts as a mediator.
 
 Layer 3
 INFRASTRUCTURE layer should depend on both the APPLICATION and DOMAIN layers
+The Infrastructure layer is responsible for managing external dependencies such as databases, web services, and other frameworks
+This layer is often referred to as the “technical glue” of Clean Architecture, as it connects all the other layers together
 
 Layer 4
 WEB API (Presentation or UI) layer should depend on only the INFRASTRUCTURE and APPLICATION layers
@@ -25,8 +29,7 @@ If using AutoMapper for Mapping Types
 
 For Respository Pattern or Data interactions
 1. The DbContext exist in the Infrastructure Layer
-    Install Microsoft.EntityFrameworkCore and Microsoft.EntityFrameworkCore.SqlServer
-
+    Install Microsoft.EntityFrameworkCore and (Microsoft.EntityFrameworkCore.SqlServer-- For SQL or Npgsql.EntityFrameworkCore.PostgreSQL)
 Repository interfaces are created at the Application Layer, while their implementations are made at the infrastructure layer
 ( Remember to register all created repositories )
 All migrations are run at the infrastructure layer
@@ -40,7 +43,7 @@ each of which could probably contain some, but not all of the below mentioned
 
  >> Command - They represent the intent to perform specific actions
 -- Command for the WRITE action to be performed  eg CreatePersonCommand (must)
--- CommandHanler for to handle the  respective command  eg CreatePersonCommandHandler (must)
+-- CommandHandler to handle the  respective command  eg CreatePersonCommandHandler (must)
 -- Command Response (optional, depending on use case)
 -- Command Validator (optional, for performing validations)
 
@@ -61,3 +64,4 @@ For a feature, say Person, you create
 Command or Query must implement the IRequest<> interface from MediatR,
 while the corresponding handler, must implement the IRequestHandler<Command or Query, Return Type supplied in the Command or Query> interface  
 and must implement the Handle method of the interface
+
