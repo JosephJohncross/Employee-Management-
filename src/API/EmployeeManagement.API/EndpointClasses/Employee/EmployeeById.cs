@@ -1,3 +1,5 @@
+using EmployeeManagement.Application.Features.Employee.Queries.GetEmployeeById;
+
 namespace EmployeeManagement.API.EndpointClasses.Employee
 {
     [ApiController]
@@ -5,12 +7,18 @@ namespace EmployeeManagement.API.EndpointClasses.Employee
     [Consumes(MediaTypeNames.Application.Json)]
     public class EmployeeById : ControllerBase
     {
-        [HttpGet("/api/employees/{id:int}", Name = "GetEmployeeById")]
+        public ISender _mediator { get; set; }
+        public EmployeeById(ISender mediator)
+        {
+            _mediator = mediator;
+        }
+        [HttpGet("/api/employees/{id}", Name = "GetEmployeeById")]
         [Description("Returns an Employee details based on Id")]
         [SwaggerOperation(Tags = new[] { "Employee" })]
-        public ActionResult HandleAsync(int Id)
+        public async Task<ActionResult> HandleAsync(Guid Id)
         {
-            return Ok();
+            var getEmployeeById = new GetEmployeeByIdQuery() {EmployeeId = Id};
+            return getEmployeeById != null ? Ok (await _mediator.Send(getEmployeeById)) : NotFound();
         }
     }
 }
