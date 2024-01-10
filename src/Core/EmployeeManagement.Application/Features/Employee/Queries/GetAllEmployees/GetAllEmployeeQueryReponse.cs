@@ -6,10 +6,10 @@ using EmployeeManagement.Application.Response;
 
 namespace EmployeeManagement.Application.Features.Employee.Queries.GetAllEmployees
 {
-    public class GetAllEmployeeQueryReponse : BaseResponse
+    public class GetAllEmployeeQueryReponse<T> : BaseResponse
     {
         public GetAllEmployeeQueryReponse() : base() { }
 
-        public IEnumerable<EmployeeDto> AllEmployees { get; set; }
+        public T AllEmployees { get; set; }
     }
 }
