@@ -13,6 +13,12 @@ INFRASTRUCTURE layer should depend on both the APPLICATION and DOMAIN layers
 The Infrastructure layer is responsible for managing external dependencies such as databases, web services, and other frameworks
 This layer is often referred to as the “technical glue” of Clean Architecture, as it connects all the other layers together
 
+For adding Database connection, since this layer is incharge of all database related stuffs
+-- If using Entity Framework, and Postgres, install the following packages
+--Npgsql.EntityFrameworkCore.PostgreSQL -- translate classes in Migration files to database schema
+--Microsoft.EntityFrameworkCore.Tools -- for command line interactions
+--
+
 Layer 4
 WEB API (Presentation or UI) layer should depend on only the INFRASTRUCTURE and APPLICATION layers
 
