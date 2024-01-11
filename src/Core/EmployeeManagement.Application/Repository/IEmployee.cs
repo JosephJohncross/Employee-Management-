@@ -13,7 +13,7 @@ namespace EmployeeManagement.Application.Repository
         public Task<IEnumerable<T>> AllEmployee();
         public Task<IEnumerable<T>> GetEmployeeByDepartmentId();
         public Task<T> GetEmployeeById();
-        public Task<BaseResponse> CreateEmployee(CreateEmployeeCommand employeeDetails);
+        public Task<BaseResponse<T>> CreateEmployee(CreateEmployeeCommand employeeDetails);
         public Task DeleteEmployee(Guid employeeId);
     }
 }

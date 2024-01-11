@@ -6,10 +6,8 @@ using EmployeeManagement.Application.Response;
 
 namespace EmployeeManagement.Application.Features.Employee.Queries.GetAllEmployees
 {
-    public class GetAllEmployeeQueryReponse<T> : BaseResponse
+    public class GetAllEmployeeQueryReponse<T> : BaseResponse<T>
     {
         public GetAllEmployeeQueryReponse() : base() { }
-
-        public T AllEmployees { get; set; }
     }
 }
