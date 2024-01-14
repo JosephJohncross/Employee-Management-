@@ -8,11 +8,9 @@ namespace EmployeeManagement.API.EndpointClasses.Employee
     public class EmployeeById : ControllerBase
     {
         public ISender _mediator { get; set; }
-        public EmployeeById(ISender mediator)
-        {
-            _mediator = mediator;
-        }
-        [HttpGet("/api/employees/{id}", Name = "GetEmployeeById")]
+        public EmployeeById(ISender mediator) => _mediator = mediator;
+        
+        [HttpGet("/employees/{id}", Name = "GetEmployeeById")]
         [Description("Returns an Employee details based on Id")]
         [SwaggerOperation(Tags = new[] { "Employee" })]
         public async Task<ActionResult> HandleAsync(Guid Id)

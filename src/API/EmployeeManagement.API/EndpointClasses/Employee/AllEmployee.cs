@@ -9,12 +9,9 @@ namespace EmployeeManagement.API.EndpointClasses.Employee
     public class AllEmployee : ControllerBase
     {
         public ISender _mediator { get; set; }
-        public AllEmployee(ISender mediator)
-        {
-            _mediator = mediator;
-        }
+        public AllEmployee(ISender mediator) => _mediator = mediator;
 
-        [HttpGet("/api/employees", Name = "AllEmployees")]
+        [HttpGet("/employees", Name = "AllEmployees")]
         [Description("Returns all employee of the company")]
         [SwaggerOperation(Tags = new[] { "Employee" })]
         [ProducesResponseType(StatusCodes.Status200OK)]

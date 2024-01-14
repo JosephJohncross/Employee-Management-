@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using EmployeeManagement.Application.Repository;
 
 namespace EmployeeManagement.Application.Features.Employee.Queries.GetEmployeeById
 {
@@ -12,9 +9,22 @@ namespace EmployeeManagement.Application.Features.Employee.Queries.GetEmployeeBy
 
     public class GetEmployeeByIdQueryHandler : IRequestHandler<GetEmployeeByIdQuery, GetEmployeeByIdResponse<EmployeeDto>>
     {
-        public Task<GetEmployeeByIdResponse<EmployeeDto>> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
+        private readonly IEmployee<EmployeeDto> _employee;
+        public GetEmployeeByIdQueryHandler(IEmployee<EmployeeDto> employee)
         {
-            throw new NotImplementedException();
+            _employee = employee;
+        }
+
+        public async Task<GetEmployeeByIdResponse<EmployeeDto>> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
+        {
+            var result = await _employee.GetEmployeeById(request.EmployeeId);
+            var response = new GetEmployeeByIdResponse<EmployeeDto>() {
+                Data = result,
+                Message = "Operation successful",
+                Status = true
+            };
+
+            return response;
         }
     }
 }

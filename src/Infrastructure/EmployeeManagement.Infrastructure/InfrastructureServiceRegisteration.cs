@@ -1,5 +1,5 @@
 using System.Reflection;
-using EmployeeManagement.Application.Features.Employee.Queries;
+using EmployeeManagement.Application.DTOs;
 using EmployeeManagement.Application.Repository;
 using EmployeeManagement.Infrastructure.Data;
 using EmployeeManagement.Infrastructure.Repository;
@@ -16,7 +16,8 @@ namespace EmployeeManagement.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options => {
                 options.UseNpgsql(config.GetConnectionString("Default"), b => b.MigrationsAssembly("EmployeeManagement.Infrastructure"));
             });
-            services.AddTransient<IEmployee<EmployeeDto>, EmployeeRepository>();
+            services.AddTransient(typeof(IEmployee<>), typeof(EmployeeRepository<>));
+            services.AddTransient(typeof(IDepartmentRepository<>), typeof(DepartmentRepository<>));
             
             return services;
         }

@@ -1,5 +1,4 @@
-using EmployeeManagement.Application.Features.Employee.Commands;
-using EmployeeManagement.Application.Features.Employee.Queries;
+using EmployeeManagement.Application.DTOs;
 using EmployeeManagement.Application.Repository;
 using EmployeeManagement.Application.Response;
 using EmployeeManagement.Infrastructure.Data;
@@ -7,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Infrastructure.Repository
 {
-    public class EmployeeRepository : IEmployee<EmployeeDto>
+    public class EmployeeRepository<T> : IEmployee<T>
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -17,30 +16,49 @@ namespace EmployeeManagement.Infrastructure.Repository
             _mapper = mapper ?? throw new ArgumentNullException("AutoMapper Service not present. Did you forget to inject this service in your configuration file");
         }
 
-        public async Task<IEnumerable<EmployeeDto>> AllEmployee()
+        public async Task<BaseResponse> CreateEmployee(CreateEmployeeDTO employeeDetails)
         {
-            var allEmployee = await _context.Employee.Select(employee => employee).ToListAsync();
-            return _mapper.Map<IEnumerable<EmployeeDto>>(allEmployee);
-        }
-
-        public Task<BaseResponse<EmployeeDto>> CreateEmployee(CreateEmployeeCommand employeeDetails)
-        {
-            throw new NotImplementedException();
+            var employee = _mapper.Map<Employee>(employeeDetails);
+            var department = await _context.Department.FindAsync(employeeDetails.DepartmentId);
+            
+        
+            if (department != null){
+                await _context.Employee.AddAsync(employee);
+                SaveAsync();
+                
+                return new BaseResponse() {
+                    Message = "Employee created sucessfully",
+                    Status = true
+                };
+            }else {
+                return new BaseResponse() {
+                    Message = "Department does not exist",
+                    Status = false
+                };
+            }
+           
         }
 
         public Task DeleteEmployee(Guid employeeId)
         {
             throw new NotImplementedException();
         }
-
-        public Task<IEnumerable<EmployeeDto>> GetEmployeeByDepartmentId()
+        
+        public void SaveAsync()
         {
-            throw new NotImplementedException();
+            _context.SaveChangesAsync();
         }
 
-        public Task<EmployeeDto> GetEmployeeById()
+        async Task<IEnumerable<T>> IEmployee<T>.AllEmployee()
         {
-            throw new NotImplementedException();
+            var allEmployee = await _context.Employee.Select(employee => employee).ToListAsync();
+            return _mapper.Map<IEnumerable<T>>(allEmployee);
+        }
+
+        async Task<T> IEmployee<T>.GetEmployeeById(Guid id)
+        {
+             var result =  await _context.Employee.FindAsync(id);
+            return _mapper.Map<T>(result);
         }
     }
 }

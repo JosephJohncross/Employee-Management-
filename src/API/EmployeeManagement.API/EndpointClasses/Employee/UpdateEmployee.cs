@@ -5,7 +5,7 @@ namespace EmployeeManagement.API.EndpointClasses.Employee
     [Consumes(MediaTypeNames.Application.Json)]
     public class UpdateEmployee : ControllerBase
     {
-        [HttpPatch("/api/employees/update", Name = "UpdateEmployee")]
+        [HttpPatch("/employees/update", Name = "UpdateEmployee")]
         [Description("Update an employee info")]
         [SwaggerOperation(Tags = new[] { "Employee" })]
         public ActionResult HandleAsync()

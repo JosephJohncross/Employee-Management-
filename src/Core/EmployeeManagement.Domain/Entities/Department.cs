@@ -9,8 +9,12 @@ namespace EmployeeManagement.Domain.Entities
     public class Department : AuditableEntity
     {
         [Key]
-        public int Guid { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Abbreviation { get; set; } = string.Empty;
+
+        // Projects and initiatives --- NOte project can be shared by various departments
+        
+        // Budget and resources
     }
 }

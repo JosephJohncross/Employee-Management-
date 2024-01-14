@@ -5,7 +5,7 @@ namespace EmployeeManagement.API.EndpointClasses.Employee
     [Consumes(MediaTypeNames.Application.Json)]
     public class DeleteEmployee : ControllerBase
     {
-        [HttpDelete("/api/employees/delete", Name = "DeleteEmployee")]
+        [HttpDelete("/employees/delete", Name = "DeleteEmployee")]
         [Description("Deletes an employee")]
         [SwaggerOperation(Tags = new[] { "Employee" })]
         public ActionResult HandleAsync()

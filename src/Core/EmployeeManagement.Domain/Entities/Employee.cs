@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmployeeManagement.Domain.Entities
 {
@@ -10,6 +11,9 @@ namespace EmployeeManagement.Domain.Entities
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public DateOnly DateOfBirth { get; set; }
+
+        [EmailAddress]
+        
         public required string Email { get; set; }
         public required string PhoneNumber { get; set; }
         public List<string> Positions { get; set; } = new ();

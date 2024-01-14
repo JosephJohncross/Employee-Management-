@@ -13,5 +13,12 @@ namespace EmployeeManagement.Infrastructure.Data
         public DbSet<Employee> Employee { get; set; }
         public DbSet<Department> Department { get; set; }
         public DbSet<Address> Address { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Employee>()
+                .HasIndex(b => b.Email)
+                .IsUnique();
+        }
     }
 }
