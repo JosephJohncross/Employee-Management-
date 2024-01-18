@@ -17,7 +17,7 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         [HttpDelete("/departments/delete", Name = "DeleteDepartment")]
         [Description("Deletes a department in the organization")]
         [SwaggerOperation(Tags = new[] { "Department"})]
-        public async Task<ActionResult> HandleAsync ([FromBody] int departmenId)
+        public async Task<ActionResult> HandleAsync ([FromBody] Guid departmenId)
         {
             var response = await _mediator.Send(new DeleteDepartmentCommand(){DepartmentId = departmenId});
             return Ok(response);

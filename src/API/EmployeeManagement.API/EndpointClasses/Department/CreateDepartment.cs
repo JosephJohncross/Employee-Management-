@@ -14,7 +14,7 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         [HttpPost("/departments/create", Name = "CreateDepartment")]
         [Description("Creates a department in the organization")]
         [SwaggerOperation(Tags = new[] { "Department"})]
-        public async Task<ActionResult> HandleAsync ([FromBody] GetDepartmentDTO departmentDTO)
+        public async Task<ActionResult> HandleAsync ([FromBody] CreateDepartmentDTO departmentDTO)
         {
             var response = await _mediator.Send(new CreateDepartmentCommand(){DepartmentDTO = departmentDTO});
             return Ok(response);

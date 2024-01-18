@@ -3,6 +3,7 @@ using EmployeeManagement.Application.Features.Employee.Queries.GetAllEmployees;
 
 namespace EmployeeManagement.API.EndpointClasses.Employee
 {
+    // Works for now
     [ApiController]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]

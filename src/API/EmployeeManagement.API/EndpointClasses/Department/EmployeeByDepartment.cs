@@ -24,7 +24,7 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         [HttpGet("/departments/{departmentId}/employee", Name = "GetEmployeeByDepartment")]
         [Description("Returns all employees in a department")]
         [SwaggerOperation(Tags = new[] { "Department" })]
-        public async Task<ActionResult> HandleAsync(int departmentId)
+        public async Task<ActionResult> HandleAsync(Guid departmentId)
         {
             GetEmployeeByDepartmentQuery getEmployeeByDepartmentId = new() { DepartmentId = departmentId };
             if (getEmployeeByDepartmentId != null)

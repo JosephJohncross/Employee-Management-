@@ -10,11 +10,12 @@ namespace EmployeeManagement.API.EndpointClasses.Department
     {
         private readonly IMediator _mediator;
         public GetDepartmentById(IMediator mediator) => _mediator = mediator;
+        
 
-        [HttpGet("/departments/{departmentId:int}", Name = "GetDepartmentById")]
+        [HttpGet("/departments/{departmentId}", Name = "GetDepartmentById")]
         [Description("Returns a department")]
         [SwaggerOperation(Tags = new[] { "Department"})]
-        public async Task<ActionResult> HandleAsync (int departmentId)
+        public async Task<ActionResult> HandleAsync (Guid departmentId)
         {
             var response = await _mediator.Send(new GetDepartmentByIdQuery(){DepartmentId = departmentId});
             return Ok(response);

@@ -10,7 +10,7 @@ namespace EmployeeManagement.API.EndpointClasses.Employee
         public ISender _mediator { get; set; }
         public EmployeeById(ISender mediator) => _mediator = mediator;
         
-        [HttpGet("/employees/{id}", Name = "GetEmployeeById")]
+        [HttpGet("/employees/{Id}", Name = "GetEmployeeById")]
         [Description("Returns an Employee details based on Id")]
         [SwaggerOperation(Tags = new[] { "Employee" })]
         public async Task<ActionResult> HandleAsync(Guid Id)

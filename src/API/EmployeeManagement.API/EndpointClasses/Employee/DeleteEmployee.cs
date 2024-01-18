@@ -1,3 +1,5 @@
+using EmployeeManagement.Application.Features.Employee.Commands;
+
 namespace EmployeeManagement.API.EndpointClasses.Employee
 {
     [ApiController]
@@ -5,12 +7,17 @@ namespace EmployeeManagement.API.EndpointClasses.Employee
     [Consumes(MediaTypeNames.Application.Json)]
     public class DeleteEmployee : ControllerBase
     {
+        private readonly ISender _sender;
+        public DeleteEmployee(ISender sender) => _sender = sender;
+     
         [HttpDelete("/employees/delete", Name = "DeleteEmployee")]
         [Description("Deletes an employee")]
         [SwaggerOperation(Tags = new[] { "Employee" })]
-        public ActionResult HandleAsync()
+        public async Task<ActionResult> HandleAsync([FromBody] Guid employeeId)
         {
-            return Ok();
+            var deleteEmployeeCommand = new DeleteEmployeeCommand(){EmployeeId = employeeId};
+            var result = await _sender.Send(deleteEmployeeCommand);
+            return Ok(result);
         }
     }
 }
