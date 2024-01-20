@@ -2,7 +2,7 @@ namespace EmployeeManagement.Application.Features.Department.Queries.GetEmployee
 {
     public class GetEmployeeByDepartmentQuery :  IRequest<GetEmployeeByDepartmentResponse<IEnumerable<EmployeeDto>>>
     {
-        public int DepartmentId { get; set; }
+        public Guid DepartmentId { get; set; }
     }
 
     public class GetEmployeeByDepartmentQueryHandler : IRequestHandler<GetEmployeeByDepartmentQuery, GetEmployeeByDepartmentResponse<IEnumerable<EmployeeDto>>>

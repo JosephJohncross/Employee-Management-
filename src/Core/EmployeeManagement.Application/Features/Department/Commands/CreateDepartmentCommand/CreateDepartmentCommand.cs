@@ -5,7 +5,7 @@ namespace EmployeeManagement.Application.Features.Department.Commands.CreateDepa
 {
     public class CreateDepartmentCommand : IRequest<BaseResponse>
     {
-        public GetDepartmentDTO DepartmentDTO { get; set; }
+        public CreateDepartmentDTO DepartmentDTO { get; set; }
     }
 
     public class CreateDepartmentCommandHandler : IRequestHandler<CreateDepartmentCommand, BaseResponse>

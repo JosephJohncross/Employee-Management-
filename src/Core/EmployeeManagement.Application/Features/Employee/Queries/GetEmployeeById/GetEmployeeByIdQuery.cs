@@ -1,5 +1,3 @@
-using EmployeeManagement.Application.Repository;
-
 namespace EmployeeManagement.Application.Features.Employee.Queries.GetEmployeeById
 {
     public class GetEmployeeByIdQuery: IRequest<GetEmployeeByIdResponse<EmployeeDto>>

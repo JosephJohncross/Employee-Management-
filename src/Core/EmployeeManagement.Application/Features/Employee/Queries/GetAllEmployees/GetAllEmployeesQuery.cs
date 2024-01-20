@@ -1,6 +1,4 @@
 
-using EmployeeManagement.Application.Repository;
-
 namespace EmployeeManagement.Application.Features.Employee.Queries.GetAllEmployees
 {
     public class GetAllEmployeesQuery: IRequest<GetAllEmployeeQueryReponse<IEnumerable<EmployeeDto>>>

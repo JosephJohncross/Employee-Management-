@@ -8,6 +8,7 @@ namespace EmployeeManagement.Domain.Entities
         [Key]
         public Guid Id { get; set; }
         public required Department Department { get; set; }
+        public Guid DepartmentId { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public DateOnly DateOfBirth { get; set; }
@@ -25,7 +26,7 @@ namespace EmployeeManagement.Domain.Entities
 
         public string GetFullName ()
         {
-            return FirstName + LastName;
+            return FirstName + " " + LastName;
         }
 
     }

@@ -19,6 +19,17 @@ namespace EmployeeManagement.Infrastructure.Data
             modelBuilder.Entity<Employee>()
                 .HasIndex(b => b.Email)
                 .IsUnique();
+            modelBuilder.Entity<Employee>()
+                .HasOne(d => d.Department)
+                .WithMany(e => e.Employees)
+                .HasForeignKey(e => e.DepartmentId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Department>()
+                .HasMany(d => d.SubDepartments)
+                .WithOne(d => d.ParentDepartment)
+                .HasForeignKey(d => d.ParentDepartmentId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

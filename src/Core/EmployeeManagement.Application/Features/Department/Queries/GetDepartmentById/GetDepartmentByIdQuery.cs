@@ -8,7 +8,7 @@ namespace EmployeeManagement.Application.Features.Department.Queries.GetDepartme
 {
     public class GetDepartmentByIdQuery : IRequest<GetDepartmentByIdQueryResponse<GetDepartmentDTO>>
     {
-        public int DepartmentId { get; set; }
+        public Guid DepartmentId { get; set; }
     }
 
     public class GetDepartmentByIdQueryHandler : IRequestHandler<GetDepartmentByIdQuery, GetDepartmentByIdQueryResponse<GetDepartmentDTO>>

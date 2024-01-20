@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
+
 using System.Data.SqlTypes;
-using System.Linq;
-using System.Threading.Tasks;
-using EmployeeManagement.Application.DTOs;
+using EmployeeManagement.Application.Contracts.Infrastructure;
 using EmployeeManagement.Application.DTOs.Department;
-using EmployeeManagement.Application.Repository;
 using EmployeeManagement.Application.Response;
 using EmployeeManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +19,7 @@ namespace EmployeeManagement.Infrastructure.Repository
         }
 
 
-        public async Task<BaseResponse> CreateDepartment(GetDepartmentDTO departmentDetails)
+        public async Task<BaseResponse> CreateDepartment(CreateDepartmentDTO departmentDetails)
         {
             var department = _mapper.Map<Department>(departmentDetails);
             var departmentExist = await _context.Department
@@ -54,7 +50,7 @@ namespace EmployeeManagement.Infrastructure.Repository
             }
         }
 
-        public async Task<BaseResponse> DeleteDepartment(int departmentId)
+        public async Task<BaseResponse> DeleteDepartment(Guid departmentId)
         {
             var result = await _context.Department.FindAsync(departmentId);
 
@@ -82,21 +78,38 @@ namespace EmployeeManagement.Infrastructure.Repository
         public async Task<IEnumerable<T>> GetAllDepartment()
         {
             var result = await _context.Department.Select(department => department).ToListAsync();
+            // var result = _context.Department
+            //             .Include(d => d.SubDepartments)
+            //             .FirstOrDefault(d => d.ParentDepartmentId == )
             return _mapper.Map<IEnumerable<T>>(result) ?? new List<T>();
         }
 
-        public async Task<T> GetDepartmentById(int departmentId)
+        public async Task<T> GetDepartmentById(Guid departmentId)
         {
-            var result = await _context.Department.FindAsync(departmentId);
-            return _mapper.Map<T>(result);
+            try
+            {
+
+                var department = await _context.Department.FindAsync(departmentId);
+                // var result = _context.Department
+                //             .Include(d => d.SubDepartments)
+                //             .FirstOrDefault(d => d.ParentDepartmentId == departmentId);
+                            
+
+                return _mapper.Map<T>(department);
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
 
-        public async Task<IEnumerable<T>> GetEmployeeByDepartment(int departmenId)
+        public async Task<IEnumerable<T>> GetEmployeeByDepartment(Guid departmenId)
         {
             try
             {
                 var department = await _context.Department.FindAsync(departmenId);
-                if (department != null) {
+                if (department != null)
+                {
                     var employee = await _context.Employee.Where(e => e.Department.Id == departmenId).ToListAsync();
                     return _mapper.Map<IEnumerable<T>>(employee);
                 }
@@ -118,14 +131,15 @@ namespace EmployeeManagement.Infrastructure.Repository
             try
             {
                 var result = await _context.Department.FindAsync(departmentDto.DepartmentId) ?? throw new ArgumentNullException("Department with id was not found");
-                if (result != null){
+                if (result != null)
+                {
                     _context.Update(result);
                     SaveAsync();
 
                     return new BaseResponse()
                     {
                         Status = true,
-                        Message = "Employee details updated successully"  
+                        Message = "Employee details updated successully"
                     };
                 }
                 throw new SqlNullValueException("Department not found");
@@ -137,42 +151,15 @@ namespace EmployeeManagement.Infrastructure.Repository
                 {
                     exceptions.Add(exception.ToString() ?? "");
                 }
-                
-                return new BaseResponse() {
+
+                return new BaseResponse()
+                {
                     Status = false,
-                    ValidationErrors =  exceptions,
+                    ValidationErrors = exceptions,
                     Message = "Operation failed"
                 };
             }
         }
 
-        async Task<BaseResponse> IDepartmentRepository<T>.DeleteDepartment(int departmentId)
-        {
-            try
-            {
-                var result = await _context.Department.FindAsync(departmentId);
-                _context.Department.Remove(result);
-
-                return new BaseResponse()
-                {
-                    Message = "Department deleted successfully",
-                    Status = true
-                };
-            }
-            catch (Exception e)
-            {
-                var exceptions = new List<string>();
-                foreach (var exception in e.Data)
-                {
-                    exceptions.Add(exception.ToString() ?? "");
-                }
-                return new BaseResponse()
-                {
-                    Message = "Operation failed",
-                    ValidationErrors = exceptions,
-                    Status = false
-                };
-            }
-        }
     }
 }
