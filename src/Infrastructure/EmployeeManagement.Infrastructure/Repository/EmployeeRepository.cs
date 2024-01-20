@@ -3,6 +3,7 @@ using EmployeeManagement.Application.DTOs;
 using EmployeeManagement.Application.DTOs.Employee;
 using EmployeeManagement.Application.Response;
 using EmployeeManagement.Infrastructure.Data;
+using EmployeeManagement.Infrastructure.Middelwares.GlobalExceptionHandlingMiddleware;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Infrastructure.Repository
@@ -13,8 +14,8 @@ namespace EmployeeManagement.Infrastructure.Repository
         private readonly IMapper _mapper;
         public EmployeeRepository(ApplicationDbContext context, IMapper mapper)
         {
-            _context = context ?? throw new ArgumentNullException("Context not found");
-            _mapper = mapper ?? throw new ArgumentNullException("AutoMapper Service not present. Did you forget to inject this service in your configuration file");
+            _context = context ?? throw new EmployeeManagementServiceNotFound("Context not found");
+            _mapper = mapper ?? throw new EmployeeManagementServiceNotFound("AutoMapper Service not present. Did you forget to inject this service in your configuration file");
         }
 
         public async Task<BaseResponse> CreateEmployee(CreateEmployeeDTO employeeDetails)
@@ -40,11 +41,7 @@ namespace EmployeeManagement.Infrastructure.Repository
                 }
                 else
                 {
-                    return new BaseResponse
-                    {
-                        Message = "Department does not exist",
-                        Status = false
-                    };
+                    throw new EmployeeManagementNotFoundException("Department does not exist");
                 }
             }
             catch (Exception ex)
@@ -73,11 +70,7 @@ namespace EmployeeManagement.Infrastructure.Repository
             }
             else
             {
-                return new BaseResponse
-                {
-                    Message = "Employee with id not found",
-                    Status = true
-                };
+                throw new EmployeeManagementNotFoundException("Employee does not exist");
             }
         }
 
@@ -130,7 +123,7 @@ namespace EmployeeManagement.Infrastructure.Repository
 
         async Task<T> IEmployee<T>.GetEmployeeById(Guid id)
         {
-            var result = await _context.Employee.Include(d => d.Department).FirstOrDefaultAsync(e => e.Id == id);
+            var result = await _context.Employee.Include(d => d.Department).FirstOrDefaultAsync(e => e.Id == id) ?? throw new EmployeeManagementNotFoundException("Employee does not exist");
             return _mapper.Map<T>(result);
         }
     }

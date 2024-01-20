@@ -4,6 +4,7 @@ using EmployeeManagement.Application.Contracts.Infrastructure;
 using EmployeeManagement.Application.DTOs.Department;
 using EmployeeManagement.Application.Response;
 using EmployeeManagement.Infrastructure.Data;
+using EmployeeManagement.Infrastructure.Middelwares.GlobalExceptionHandlingMiddleware;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Infrastructure.Repository
@@ -78,47 +79,28 @@ namespace EmployeeManagement.Infrastructure.Repository
         public async Task<IEnumerable<T>> GetAllDepartment()
         {
             var result = await _context.Department.Select(department => department).ToListAsync();
-            // var result = _context.Department
-            //             .Include(d => d.SubDepartments)
-            //             .FirstOrDefault(d => d.ParentDepartmentId == )
             return _mapper.Map<IEnumerable<T>>(result) ?? new List<T>();
         }
 
         public async Task<T> GetDepartmentById(Guid departmentId)
         {
-            try
-            {
-
-                var department = await _context.Department.FindAsync(departmentId);
-                // var result = _context.Department
-                //             .Include(d => d.SubDepartments)
-                //             .FirstOrDefault(d => d.ParentDepartmentId == departmentId);
-                            
-
-                return _mapper.Map<T>(department);
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
+            var department = await _context.Department.FindAsync(departmentId) ?? throw new EmployeeManagementNotFoundException("Department does not exist");
+            return _mapper.Map<T>(department);
+            
         }
 
         public async Task<IEnumerable<T>> GetEmployeeByDepartment(Guid departmenId)
         {
-            try
+          
+            var department = await _context.Department.FindAsync(departmenId);
+            if (department != null)
             {
-                var department = await _context.Department.FindAsync(departmenId);
-                if (department != null)
-                {
-                    var employee = await _context.Employee.Where(e => e.Department.Id == departmenId).ToListAsync();
-                    return _mapper.Map<IEnumerable<T>>(employee);
-                }
-                throw new ArgumentNullException("Department does not exist");
+                var employee = await _context.Employee.Where(e => e.Department.Id == departmenId).ToListAsync();
+                return _mapper.Map<IEnumerable<T>>(employee);
             }
-            catch (Exception e)
-            {
-                throw;
-            }
+
+            throw new EmployeeManagementNotFoundException("Department does not exist");
+            
         }
 
         public void SaveAsync()

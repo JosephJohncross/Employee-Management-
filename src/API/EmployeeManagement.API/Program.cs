@@ -1,5 +1,6 @@
 using EmployeeManagement.Application;
 using EmployeeManagement.Infrastructure;
+using EmployeeManagement.Infrastructure.Middelwares.GlobalExceptionHandlingMiddleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.MapControllers();
 
