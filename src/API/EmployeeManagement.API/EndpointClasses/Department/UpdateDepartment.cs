@@ -10,8 +10,13 @@ namespace EmployeeManagement.API.EndpointClasses.Department
     {
         private readonly ISender _mediator;
         public UpdateDepartment(ISender mediator) => _mediator = mediator;
-        
-        
+
+        /// <summary>
+        /// Updates a department details
+        /// </summary>
+        /// <param name="departmentDTO">Details to update in the department</param>
+        /// <returns></returns>
+
         [HttpPatch("/departments/update", Name = "UpdateDepartment")]
         [Description("Updates details of a department in the organization")]
         [SwaggerOperation(Tags = new[] { "Department"})]

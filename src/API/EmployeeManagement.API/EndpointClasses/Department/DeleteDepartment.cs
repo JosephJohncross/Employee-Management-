@@ -14,6 +14,11 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         private readonly ISender _mediator;
         public DeleteDepartment(ISender mediator) => _mediator = mediator;
       
+        /// <summary>
+        /// Deletes a department from an organization
+        /// </summary>
+        /// <param name="departmenId">id of department to delete</param>
+        /// <returns></returns>
         [HttpDelete("/departments/delete", Name = "DeleteDepartment")]
         [Description("Deletes a department in the organization")]
         [SwaggerOperation(Tags = new[] { "Department"})]

@@ -11,7 +11,11 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         private readonly IMediator _mediator;
         public GetDepartmentById(IMediator mediator) => _mediator = mediator;
         
-
+        /// <summary>
+        /// Gets a department by its id
+        /// </summary>
+        /// <param name="departmentId">Id of the department</param>
+        /// <returns></returns>
         [HttpGet("/departments/{departmentId}", Name = "GetDepartmentById")]
         [Description("Returns a department")]
         [SwaggerOperation(Tags = new[] { "Department"})]

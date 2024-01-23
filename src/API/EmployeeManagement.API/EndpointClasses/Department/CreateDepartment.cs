@@ -11,6 +11,11 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         private readonly ISender _mediator;
         public CreateDepartment(ISender mediator) => _mediator = mediator;
         
+        /// <summary>
+        /// Creates a new department in an organization
+        /// </summary>
+        /// <param name="departmentDTO">Details of a new department</param>
+        /// <returns></returns>
         [HttpPost("/departments/create", Name = "CreateDepartment")]
         [Description("Creates a department in the organization")]
         [SwaggerOperation(Tags = new[] { "Department"})]

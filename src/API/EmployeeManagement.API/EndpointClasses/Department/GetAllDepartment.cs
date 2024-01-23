@@ -15,6 +15,10 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         private readonly ISender _mediator;
         public GetAllDepartment(ISender mediator) => _mediator = mediator;
         
+        /// <summary>
+        /// Gets all department in an organization
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("/departments", Name = "GetAllDepartment")]
         [Description("Returns all department in the organization")]
         [SwaggerOperation(Tags = new[] { "Department"})]

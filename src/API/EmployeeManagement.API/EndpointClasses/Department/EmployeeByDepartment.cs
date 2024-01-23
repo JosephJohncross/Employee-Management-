@@ -8,33 +8,25 @@ namespace EmployeeManagement.API.EndpointClasses.Department
 {
 
     [ApiController]
-    [Produces(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json, MediaTypeNames.Text.Plain)]
     [Consumes(MediaTypeNames.Application.Json)]
     public class EmployeeByDepartment : ControllerBase
     {
         private readonly ISender _mediator;
         public EmployeeByDepartment(ISender mediator) => _mediator = mediator;
+         
         /// <summary>
-        /// All Employees per department
+        /// Gets all employees in a department
         /// </summary>
-        /// <param name="deptAbbr">Department abbreviation</param>
-        /// <returns>A collection of employees</returns>
-        /// 
-
+        /// <param name="departmentId">The id of the department the employees belong to</param>
+        /// <returns></returns>
         [HttpGet("/departments/{departmentId}/employee", Name = "GetEmployeeByDepartment")]
         [Description("Returns all employees in a department")]
         [SwaggerOperation(Tags = new[] { "Department" })]
         public async Task<ActionResult> HandleAsync(Guid departmentId)
         {
             GetEmployeeByDepartmentQuery getEmployeeByDepartmentId = new() { DepartmentId = departmentId };
-            if (getEmployeeByDepartmentId != null)
-            {
-                return Ok(await _mediator.Send(getEmployeeByDepartmentId));
-            }
-            else
-            {
-                return NotFound();
-            }
+            return Ok(await _mediator.Send(getEmployeeByDepartmentId));
         }
     }
 }
