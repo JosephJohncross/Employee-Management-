@@ -1,11 +1,12 @@
 using EmployeeManagement.Application.DTOs.Department;
 using EmployeeManagement.Application.Features.Department.Commands.CreateDepartmentCommand;
+using EmployeeManagement.Application.Response;
 
 namespace EmployeeManagement.API.EndpointClasses.Department
 {
     [ApiController]
-    [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json, MediaTypeNames.Application.Xml)]
     public class CreateDepartment: ControllerBase
     {
         private readonly ISender _mediator;
@@ -19,7 +20,9 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         [HttpPost("/departments/create", Name = "CreateDepartment")]
         [Description("Creates a department in the organization")]
         [SwaggerOperation(Tags = new[] { "Department"})]
-        public async Task<ActionResult> HandleAsync ([FromBody] CreateDepartmentDTO departmentDTO)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<BaseResponse>> HandleAsync ([FromBody] CreateDepartmentDTO departmentDTO)
         {
             var response = await _mediator.Send(new CreateDepartmentCommand(){DepartmentDTO = departmentDTO});
             return Ok(response);

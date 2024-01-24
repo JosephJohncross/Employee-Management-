@@ -39,15 +39,7 @@ namespace EmployeeManagement.Infrastructure.Repository
             }
             else
             {
-                return new BaseResponse()
-                {
-                    Message = $"Department creation unsuccessful",
-                    Status = false,
-                    ValidationErrors = new List<string>()
-                    {
-                        "Department name or abbreviation already exist"
-                    }
-                };
+                throw new EmployeeManagementBadRequestException("Department already exist");
             }
         }
 
@@ -68,11 +60,7 @@ namespace EmployeeManagement.Infrastructure.Repository
             }
             else
             {
-                return new BaseResponse()
-                {
-                    Message = "Department deletion operation unsuccessful",
-                    Status = false
-                };
+                throw new EmployeeManagementNotFoundException("Department does not exist");
             }
         }
 
@@ -86,12 +74,12 @@ namespace EmployeeManagement.Infrastructure.Repository
         {
             var department = await _context.Department.FindAsync(departmentId) ?? throw new EmployeeManagementNotFoundException("Department does not exist");
             return _mapper.Map<T>(department);
-            
+
         }
 
         public async Task<IEnumerable<T>> GetEmployeeByDepartment(Guid departmenId)
         {
-          
+
             var department = await _context.Department.FindAsync(departmenId);
             if (department != null)
             {
@@ -100,7 +88,7 @@ namespace EmployeeManagement.Infrastructure.Repository
             }
 
             throw new EmployeeManagementNotFoundException("Department does not exist");
-            
+
         }
 
         public void SaveAsync()

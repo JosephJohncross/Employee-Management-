@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EmployeeManagement.Application.DTOs;
 using EmployeeManagement.Application.Features.Department.Queries.GetEmployeeByDepartment;
+using EmployeeManagement.Application.Response;
 
 namespace EmployeeManagement.API.EndpointClasses.Department
 {
 
     [ApiController]
-    [Produces(MediaTypeNames.Application.Json, MediaTypeNames.Text.Plain)]
-    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json, MediaTypeNames.Application.Xml)]
     public class EmployeeByDepartment : ControllerBase
     {
         private readonly ISender _mediator;
@@ -23,7 +24,9 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         [HttpGet("/departments/{departmentId}/employee", Name = "GetEmployeeByDepartment")]
         [Description("Returns all employees in a department")]
         [SwaggerOperation(Tags = new[] { "Department" })]
-        public async Task<ActionResult> HandleAsync(Guid departmentId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<BaseResponse<EmployeeDto[]>>> HandleAsync(Guid departmentId)
         {
             GetEmployeeByDepartmentQuery getEmployeeByDepartmentId = new() { DepartmentId = departmentId };
             return Ok(await _mediator.Send(getEmployeeByDepartmentId));

@@ -1,11 +1,12 @@
+using EmployeeManagement.Application.DTOs.Department;
 using EmployeeManagement.Application.Features.Department.Queries.GetDepartmentById;
+using EmployeeManagement.Application.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagement.API.EndpointClasses.Department
 {
     [ApiController]
-    [Produces(MediaTypeNames.Application.Json)]
-    [Consumes(MediaTypeNames.Application.Json)]
+    [Produces(MediaTypeNames.Application.Json, MediaTypeNames.Application.Xml)]
     public class GetDepartmentById : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -19,7 +20,9 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         [HttpGet("/departments/{departmentId}", Name = "GetDepartmentById")]
         [Description("Returns a department")]
         [SwaggerOperation(Tags = new[] { "Department"})]
-        public async Task<ActionResult> HandleAsync (Guid departmentId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<BaseResponse<GetDepartmentDTO>>> HandleAsync (Guid departmentId)
         {
             var response = await _mediator.Send(new GetDepartmentByIdQuery(){DepartmentId = departmentId});
             return Ok(response);

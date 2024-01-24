@@ -7,7 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(config => {
+    config.ReturnHttpNotAcceptable = true;
+})
+.AddXmlDataContractSerializerFormatters()
+;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options => {
@@ -28,10 +32,15 @@ builder.Services.AddSwaggerGen(options => {
             }
         });
         
-        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml");
+        // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        foreach (var xmlFile in xmlFiles)
+        {
+            options.IncludeXmlComments(xmlFile);
+        }
         
-        options.IncludeXmlComments(xmlPath);
+        // options.IncludeXmlComments(xmlPath);
 });
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureService(builder.Configuration);
