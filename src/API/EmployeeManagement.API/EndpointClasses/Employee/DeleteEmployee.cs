@@ -5,6 +5,7 @@ namespace EmployeeManagement.API.EndpointClasses.Employee
     [ApiController]
     [Produces(MediaTypeNames.Application.Json)]
     [Consumes(MediaTypeNames.Application.Json)]
+    // [ApiExplorerSettings(GroupName = "EmployeeManagementEmployee")]
     public class DeleteEmployee : ControllerBase
     {
         private readonly ISender _sender;

@@ -1,4 +1,6 @@
 using System.Reflection;
+using Asp.Versioning;
+using Asp.Versioning.Builder;
 using EmployeeManagement.Application;
 using EmployeeManagement.Infrastructure;
 using EmployeeManagement.Infrastructure.Middelwares.GlobalExceptionHandlingMiddleware;
@@ -14,10 +16,25 @@ builder.Services.AddControllers(config => {
 ;
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddApiVersioning(setupAction => {
+    setupAction.DefaultApiVersion = new ApiVersion(1, 0);
+    setupAction.ReportApiVersions = true;
+    // setupAction.AssumeDefaultVersionWhenUnspecified = true;
+    setupAction.ApiVersionReader = ApiVersionReader.Combine(
+        new UrlSegmentApiVersionReader(),
+        new HeaderApiVersionReader("X-Api-Version")
+    );
+})
+.AddApiExplorer(options => {
+    options.GroupNameFormat = "'v'V";
+    options.SubstituteApiVersionInUrl = true;
+});
+
 builder.Services.AddSwaggerGen(options => {
         options.EnableAnnotations();
 
-        options.SwaggerDoc("EmployeeManagement", new () {
+        options.SwaggerDoc("v1", new () {
             Contact = new () {
                 Email = "josephibochi2@gmail.com",
                 Name = "Joseph Ibochi",
@@ -32,6 +49,36 @@ builder.Services.AddSwaggerGen(options => {
             }
         });
         
+        // options.SwaggerDoc("EmployeeManagementDepartment", new () {
+        //     Contact = new () {
+        //         Email = "josephibochi2@gmail.com",
+        //         Name = "Joseph Ibochi",
+        //         Url = new Uri("https://linkedin/joseph-ibochi")
+        //     },
+        //     Description = "Through this API, you can manage all information of an organization department",
+        //     Version = "v1",
+        //     Title = "Employee Management (Department)",
+        //     License = new () {
+        //         Name = "MIT License",
+        //         Url = new Uri("https://opensource.org/licenses/MIT")
+        //     }
+        // });
+
+        // options.SwaggerDoc("EmployeeManagementEmployee", new () {
+        //     Contact = new () {
+        //         Email = "josephibochi2@gmail.com",
+        //         Name = "Joseph Ibochi",
+        //         Url = new Uri("https://linkedin/joseph-ibochi")
+        //     },
+        //     Description = "Through this API, you can manage all information of an organization employee",
+        //     Version = "v1",
+        //     Title = "Employee Management (Employee)",
+        //     License = new () {
+        //         Name = "MIT License",
+        //         Url = new Uri("https://opensource.org/licenses/MIT")
+        //     }
+        // });
+        
         // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml");
         // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -39,12 +86,12 @@ builder.Services.AddSwaggerGen(options => {
         {
             options.IncludeXmlComments(xmlFile);
         }
-        
-        // options.IncludeXmlComments(xmlPath);
 });
+
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureService(builder.Configuration);
-// builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+
 
 var app = builder.Build();
 
@@ -53,8 +100,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(setupAction => {
-        // setupAction.RoutePrefix = string.Empty;
-        setupAction.SwaggerEndpoint("/swagger/EmployeeManagement/swagger.json", "Employee Management");
+        setupAction.SwaggerEndpoint("/swagger/v1/swagger.json", "Employee Management");
+        // setupAction.SwaggerEndpoint("/swagger/EmployeeManagementEmployee/swagger.json", "Employee Management (Employee)");
+        // setupAction.SwaggerEndpoint("/swagger/EmployeeManagementDepartment/swagger.json", "Employee Management (Department)");
     });
 }
 
