@@ -25,7 +25,7 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         [SwaggerOperation(Tags = new[] { "Department"})]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        // [MapToApiVersion(1)]
+        [MapToApiVersion(1)]
         public async Task<ActionResult<BaseResponse<GetDepartmentDTO>>> HandleAsync (Guid departmentId)
         {
             var response = await _mediator.Send(new GetDepartmentByIdQuery(){DepartmentId = departmentId});

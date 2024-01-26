@@ -23,11 +23,11 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         /// Gets all department in an organization
         /// </summary>
         /// <returns></returns>
-        [HttpGet( Name = "GetAllDepartment")]
+        [HttpGet(Name = "GetAllDepartment")]
         [Description("Returns all department in the organization")]
         [SwaggerOperation(Tags = new[] { "Department"})]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        // [MapToApiVersion(1)]
+        [MapToApiVersion(1)]
         public async Task<ActionResult<BaseResponse<GetDepartmentDTO[]>>> HandleAsync ()
         {
             var response = await _mediator.Send(new GetAllDepartmentQuery());

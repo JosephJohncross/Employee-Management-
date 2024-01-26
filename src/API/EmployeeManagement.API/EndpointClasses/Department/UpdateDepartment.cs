@@ -23,7 +23,7 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         [HttpPatch(Name = "UpdateDepartment")]
         [Description("Updates details of a department in the organization")]
         [SwaggerOperation(Tags = new[] { "Department"})]
-        // [MapToApiVersion(1)]
+        [MapToApiVersion(1)]
         public async Task<ActionResult> HandleAsync ([FromBody] UpdateDepartmentDto departmentDTO)
         {
             var response = await _mediator.Send(departmentDTO);

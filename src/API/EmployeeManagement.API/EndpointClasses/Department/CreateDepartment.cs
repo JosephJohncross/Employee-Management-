@@ -26,7 +26,7 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         [SwaggerOperation(Tags = new[] { "Department"})]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        // [MapToApiVersion(1)]
+        [MapToApiVersion(1)]
         public async Task<ActionResult<BaseResponse>> HandleAsync ([FromBody] CreateDepartmentDTO departmentDTO)
         {
             var response = await _mediator.Send(new CreateDepartmentCommand(){DepartmentDTO = departmentDTO});
