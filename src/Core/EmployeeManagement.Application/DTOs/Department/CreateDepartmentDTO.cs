@@ -5,20 +5,12 @@ namespace EmployeeManagement.Application.DTOs.Department
     /// <summary>
     /// Department with name, abbreviation and parent department id fields
     /// </summary>
-    public class CreateDepartmentDTO
-    {
-        /// <summary>
-        /// Name of department
-        /// </summary>
-        public required string Name { get; set; }
-        /// <summary>
-        /// Abbreviation of department name
-        /// </summary>
-        [MaxLength(3)]
-        public required string Abbreviation { get; set; }
-        /// <summary>
-        /// Parent department if any
-        /// </summary>
-        public Guid? ParentDeparmentId { get; set; }
-    }
+    /// <param name="Name"> Name of department</param>
+    /// <param name="Abbreviation">Abbreviation of department name</param>
+    /// <param name="ParentDeparmentId">Parent department if any</param>
+    public record CreateDepartmentDTO(
+        string Name,
+        string Abbreviation,
+        Guid? ParentDeparmentId
+    );
 }

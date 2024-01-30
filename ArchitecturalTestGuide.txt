@@ -1,0 +1,8 @@
+1. All classes inheriting from the ControllerBase must implement only one method -- HandleAsync
+2. All classes inheriting from IRequest interface 
+3. Domain Layer must have no dependency
+4. Application layer must depend only on the Domain Layer
+5. Infrastructure must only depend on the application layer
+6. External services and APIs have no interaction with the Domain Layer
+7. Command and Query handler must follow a particular naming convention (end with a Handler)
+8. Controllers cannot depend on repositories directly
