@@ -1,12 +1,11 @@
-using System.Reflection;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
-using Asp.Versioning.Builder;
 using EmployeeManagement.Application;
 using EmployeeManagement.Infrastructure;
 using EmployeeManagement.Infrastructure.Middelwares.GlobalExceptionHandlingMiddleware;
-using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Serilog;
+using HealthChecks.UI.Core;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +37,9 @@ var apiVersionDescriptionProvider =
     builder.Services.BuildServiceProvider()
     .GetService<IApiVersionDescriptionProvider>();
 
+builder.Services.AddHealthChecks()
+                .AddNpgSql(builder.Configuration.GetConnectionString("Default"));
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations();
@@ -57,28 +59,28 @@ builder.Services.AddSwaggerGen(options =>
                 Name = "MIT License",
                 Url = new Uri("https://opensource.org/licenses/MIT")
             }
-        });
+        });       
+
     }
 
-    // options.DocInclusionPredicate((documentName, apiDescription) => 
-    // {
-    //     var actionAApiVersion = apiDescription.ActionDescriptor.GetApiVersionMetadata(ApiVersionMapping.Explicit | ApiVersionMapping.Implicit);
-    // });
-
-
-    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml");
-    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     foreach (var xmlFile in xmlFiles)
     {
         options.IncludeXmlComments(xmlFile);
     }
+
+     // Add custom operation for health check
+     options.SwaggerDoc("health", new OpenApiInfo { Title = "Health Check", Version = "v1" });
+     options.DocumentFilter<HealthDocumentFilter>();
 });
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureService(builder.Configuration);
+builder.Services.AddLogging();
 
-
+builder.Host.UseSerilog((context, loggerConfig) => {
+    loggerConfig.ReadFrom.Configuration(context.Configuration);
+});
 
 var app = builder.Build();
 
@@ -96,9 +98,13 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseHealthChecks("/health");
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseSerilogRequestLogging();
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
