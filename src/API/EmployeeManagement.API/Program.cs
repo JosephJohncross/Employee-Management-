@@ -6,6 +6,7 @@ using EmployeeManagement.Infrastructure.Middelwares.GlobalExceptionHandlingMiddl
 using Serilog;
 using HealthChecks.UI.Core;
 using Microsoft.OpenApi.Models;
+using EmployeeManagement.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,7 +71,7 @@ builder.Services.AddSwaggerGen(options =>
     }
 
      // Add custom operation for health check
-     options.SwaggerDoc("health", new OpenApiInfo { Title = "Health Check", Version = "v1" });
+     options.SwaggerDoc("health", new () { Title = "Health Check", Version = "v1" });
      options.DocumentFilter<HealthDocumentFilter>();
 });
 

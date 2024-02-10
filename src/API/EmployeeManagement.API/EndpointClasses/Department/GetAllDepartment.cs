@@ -29,16 +29,17 @@ namespace EmployeeManagement.API.EndpointClasses.Department
         /// <summary>
         /// Gets all department in an organization
         /// </summary>
+        /// <param name="searchTerm">search for matching department based on department name</param>
         /// <returns></returns>
         [HttpGet(Name = "GetAllDepartment")]
         [Description("Returns all department in the organization")]
         [SwaggerOperation(Tags = new[] { "Department" })]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [MapToApiVersion(1)]
-        public async Task<ActionResult<BaseResponse<GetDepartmentDTO[]>>> HandleAsync()
+        public async Task<ActionResult<BaseResponse<GetDepartmentDTO[]>>> HandleAsync([FromQuery] string? searchTerm) 
         {
             _logger.LogInformation("Calling the GetAll Department enpoint");
-            var response = await _mediator.Send(new GetAllDepartmentQuery());
+            var response = await _mediator.Send(new GetAllDepartmentQuery(searchTerm));
             return Ok(response);
         }
     }

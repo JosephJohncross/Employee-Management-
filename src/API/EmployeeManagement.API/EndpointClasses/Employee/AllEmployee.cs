@@ -25,9 +25,9 @@ namespace EmployeeManagement.API.EndpointClasses.Employee
         [SwaggerOperation(Tags = new[] { "Employee" })]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [MapToApiVersion("1.0")]
-        public async Task<ActionResult<BaseResponse>> HandleAsync()
+        public async Task<ActionResult<BaseResponse>> HandleAsync([FromQuery] string? searchTerm)
         {
-            return Ok(await _mediator.Send(new GetAllEmployeesQuery()));
+            return Ok(await _mediator.Send(new GetAllEmployeesQuery(searchTerm)));
         }
     }
 }
